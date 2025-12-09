@@ -1,6 +1,9 @@
 pipeline {
     agent any
     triggers{githubPush()}
+    environment {
+        KUBECONFIG = '/home/ubuntu/.kube/config'
+    }
 
     stages {
         stage ("Deploy to K8s") {
