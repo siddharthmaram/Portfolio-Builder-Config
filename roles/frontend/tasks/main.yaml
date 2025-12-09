@@ -18,10 +18,10 @@
                   pathType: Prefix
                   backend:
                     service:
-                      name: {{ backend_service_name }}
+                      name: "{{ backend_service_name }}"
                       port:
-                        number: {{ backend_service_port | default(8000) }}
-                        
+                        number: "{{ backend_service_port | default(8000) }}"
+
                 - path: /
                   pathType: Prefix
                   backend:
