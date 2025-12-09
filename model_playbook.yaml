@@ -7,7 +7,7 @@
     deployment_name: "model-deployment"
     app_namespace: "portfolio-model-namespace"
     app_name: "portfolio-model"
-    image_name: "siddharthmaram/portfolio-builder-model:latest"
+    image_name: "sohith18/portfolio-builder-model:latest"
     container_port: 8000
 
   tasks:
