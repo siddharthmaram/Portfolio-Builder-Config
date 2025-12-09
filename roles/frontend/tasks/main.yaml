@@ -14,14 +14,6 @@
           - host: "{{ ingress_host }}"
             http:
               paths:
-                - path: /api
-                  pathType: Prefix
-                  backend:
-                    service:
-                      name: "{{ backend_service_name }}"
-                      port:
-                        number: "{{ backend_service_port | default(8000) }}"
-
                 - path: /
                   pathType: Prefix
                   backend:
