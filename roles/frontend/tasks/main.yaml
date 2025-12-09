@@ -6,7 +6,7 @@
       apiVersion: networking.k8s.io/v1
       kind: Ingress
       metadata:
-        name: "{{ ingress_name }}""
+        name: "{{ ingress_name }}"
         namespace: "{{ app_namespace }}"
       spec:
         ingressClassName: nginx
