@@ -8,7 +8,7 @@
     app_namespace: "portfolio-model-namespace"
     app_name: "portfolio-model"
     image_name: "siddharthmaram/portfolio-builder-model:latest"
-    containerPort: 80
+    container_port: 80
 
   tasks:
     - name: Include Common Role

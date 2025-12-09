@@ -8,7 +8,7 @@
     app_namespace: "portfolio-backend-namespace"
     app_name: "portfolio-backend"
     image_name: "siddharthmaram/portfolio-builder-backend:latest"
-    containerPort: 80
+    container_port: 80
 
   tasks:
     - name: Include Common Role

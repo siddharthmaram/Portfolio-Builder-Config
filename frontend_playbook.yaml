@@ -8,7 +8,7 @@
     app_namespace: "portfolio-frontend-namespace"
     app_name: "portfolio-frontend"
     image_name: "siddharthmaram/portfolio-frontend:latest"
-    containerPort: 80
+    container_port: 80
 
     ingress_name: "frontend-ingress"
     ingress_host: "portfolio-builder.com"
