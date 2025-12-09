@@ -12,7 +12,7 @@ pipeline {
                         string(credentialsId: 'hf-token', variable: 'ML_API_KEY')
                     ]) {
                         def backendSecrets = "{\"MONGO_URI\": \"${MONGO_URI}\", \"SECRET_KEY\": \"${SECRET_KEY}\"}"
-                        def modelSecrets   = "{\"HF_TOKEN\": \"${ML_API_KEY}\", \"HF_REPO_ID\": \"SiddharthMaramreddy/Portfolio-Builder\"}"
+                        def modelSecrets   = "{\"HF_TOKEN\": \"${ML_API_KEY}\", \"HF_REPO_ID\": \"sohith18/nse-rl-portfolio-builder\"}"
 
                         sh """
                                 echo "Deploying ELK Stack..."
