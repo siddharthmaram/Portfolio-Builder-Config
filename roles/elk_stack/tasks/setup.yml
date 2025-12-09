@@ -22,12 +22,10 @@
 - name: Check Minikube status
   ansible.builtin.command: minikube status
   register: minikube_status
-  failed_when: minikube_status.rc not in [0, 7, 85]
-  changed_when: false 
+  failed_when: false  # Don't stop if it returns an error code
+  changed_when: false
 
-- name: Start Minikube if it is not running or does not exist
+- name: Start Minikube if not running
   ansible.builtin.command: minikube start
-  when: >
-    minikube_status.rc != 0 or
-    "Profile \"minikube\" not found" in minikube_status.stdout or
-    "Stopped" in minikube_status.stdout
+  # Now this works because minikube_status is actually defined above
+  when: minikube_status.rc != 0
