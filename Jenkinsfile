@@ -16,20 +16,20 @@ pipeline {
 
                         sh """
                                 echo "Deploying ELK Stack..."
-                                ansible-playbook -i inventory elk_playbook.yaml \
+                                ansible-playbook -i inventory.ini elk_playbook.yaml \
                                   -e "ansible_python_interpreter=/usr/bin/python3"
                                 
                                 echo "Deploying Frontend..."
-                                ansible-playbook -i inventory frontend_playbook.yaml \
+                                ansible-playbook -i inventory.ini frontend_playbook.yaml \
                                   -e "ansible_python_interpreter=/usr/bin/python3"
 
                                 echo "Deploying Backend..."
-                                ansible-playbook -i inventory backend_playbook.yaml \
+                                ansible-playbook -i inventory.ini backend_playbook.yaml \
                                   -e "ansible_python_interpreter=/usr/bin/python3" \
                                   -e '{"app_secrets": ${backendSecrets}}'
 
                                 echo "Deploying ML Model..."
-                                ansible-playbook -i inventory model_playbook.yaml \
+                                ansible-playbook -i inventory.ini model_playbook.yaml \
                                   -e "ansible_python_interpreter=/usr/bin/python3" \
                                   -e '{"app_secrets": ${modelSecrets}}'
                             """
