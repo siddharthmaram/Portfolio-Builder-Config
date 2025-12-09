@@ -10,7 +10,15 @@
     image_name: "siddharthmaram/portfolio-builder-backend:latest"
     container_port: 8000
 
+    ingress_name: "backend-ingress"
+    ingress_host: "portfolio-builder.com"
+    path: "/api"
+
   tasks:
     - name: Include Common Role
       include_role:
         name: common
+
+    - name: Include Ingress Role
+      include_role:
+        name: ingress
