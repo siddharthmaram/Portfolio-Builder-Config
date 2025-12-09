@@ -7,7 +7,7 @@
     deployment_name: "frontend-deployment"
     app_namespace: "portfolio-frontend-namespace"
     app_name: "portfolio-frontend"
-    image_name: "siddharthmaram/portfolio-frontend:latest"
+    image_name: "sohith18/portfolio-frontend:latest"
     container_port: 80
 
     ingress_name: "frontend-ingress"
