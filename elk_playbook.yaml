@@ -9,7 +9,7 @@
     es_port_transport: 9300
     es_statefulset_name: "elasticsearch-statefulset"
     es_replicas: 1
-    es_image: "docker.elastic.co/elasticsearch/elasticsearch:7.10.1"
+    es_image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.16"
 
     filebeat_daemonset_name: "filebeat-daemonset"
 
