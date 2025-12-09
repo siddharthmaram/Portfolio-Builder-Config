@@ -19,13 +19,13 @@
     sudo mv minikube /usr/local/bin/
   when: not minikube_stat.stat.exists
 
-- name: Check Minikube status
-  ansible.builtin.command: minikube status
-  register: minikube_status
-  failed_when: false  # Don't stop if it returns an error code
-  changed_when: false
+# - name: Check Minikube status
+#   ansible.builtin.command: minikube status
+#   register: minikube_status
+#   failed_when: false  # Don't stop if it returns an error code
+#   changed_when: false
 
-- name: Start Minikube if not running
-  ansible.builtin.command: minikube start
-  # Now this works because minikube_status is actually defined above
-  when: minikube_status.rc != 0
+# - name: Start Minikube if not running
+#   ansible.builtin.command: minikube start
+#   # Now this works because minikube_status is actually defined above
+#   when: minikube_status.rc != 0
