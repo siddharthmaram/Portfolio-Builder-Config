@@ -1,0 +1,16 @@
+---
+- name: Setting Backend Server
+  hosts: local
+  become: no
+
+  vars:
+    deployment_name: "backend-deployment"
+    app_namespace: "portfolio-backend-namespace"
+    app_name: "portfolio-backend"
+    image_name: "siddharthmaram/portfolio-builder-backend:latest"
+    containerPort: 80
+
+  tasks:
+    - name: Include Common Role
+      include_role:
+        name: common

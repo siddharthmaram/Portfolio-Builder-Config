@@ -1,0 +1,46 @@
+---
+
+- name: Make config for Namespace
+  template:
+    src: namespace.yaml.j2
+    dest: /tmp/elk_namespace.yaml
+
+- name: Make config for Elasticsearch Service
+  template:
+    src: elasticsearch_service.yaml.j2
+    dest: /tmp/elasticsearch_service.yaml
+
+- name: Make config for Elasticsearch Deployment
+  template:
+    src: elasticsearch_deploy.yaml.j2
+    dest: /tmp/elasticsearch_deploy.yaml
+
+- name: Make config for Filebeat rbac
+  template:
+    src: filebeat_rbac.yaml.j2
+    dest: /tmp/filebeat_rbac.yaml
+
+- name: Make config for Filebeat ConfigMap
+  template:
+    src: filebeat_configmap.yaml.j2
+    dest: /tmp/filebeat_configmap.yaml
+
+- name: Make config for Filebeat DaemonSet
+  template:
+    src: filebeat_daemonset.yaml.j2
+    dest: /tmp/filebeat_daemonset.yaml
+
+- name: Make config for Kibana Deployment
+  template:
+    src: kibana_deployment.yaml.j2
+    dest: /tmp/kibana_deployment.yaml
+
+- name: Make config for Kibana Service
+  template:
+    src: kibana_service.yaml.j2
+    dest: /tmp/kibana_service.yaml
+
+- name: Make config for Kibana Ingress
+  template:
+    src: kibana_ingress.yaml.j2
+    dest: /tmp/kibana_ingress.yaml

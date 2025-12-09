@@ -1,0 +1,32 @@
+---
+
+- name: Install kubectl if not present
+  snap:
+    name: kubectl
+    state: present
+    classic: yes
+
+- name: Check if Minikube is installed
+  stat:
+    path: /usr/local/bin/minikube
+  register: minikube_stat
+
+
+- name: Install Minikube if not present
+  command: |
+    curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    chmod +x minikube
+    sudo mv minikube /usr/local/bin/
+  when: not minikube_stat.stat.exists
+
+- name: Check Minikube status
+  ansible.builtin.command: minikube status
+  register: minikube_status
+  ignore_errors: true
+
+- name: Start Minikube if host is stopped or not running
+  ansible.builtin.command: minikube start
+  when: 
+    - minikube_status.rc != 0 
+    - "'Stopped' in minikube_status.stdout or 'minikube is not running' in minikube_status.stderr"
+  register: minikube_started  

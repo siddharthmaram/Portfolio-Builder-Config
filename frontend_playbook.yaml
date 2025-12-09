@@ -1,0 +1,23 @@
+---
+- name: Setting Frontend Application
+  hosts: local
+  become: no
+
+  vars:
+    deployment_name: "frontend-deployment"
+    app_namespace: "portfolio-frontend-namespace"
+    app_name: "portfolio-frontend"
+    image_name: "siddharthmaram/portfolio-frontend:latest"
+    containerPort: 80
+
+    ingress_name: "frontend-ingress"
+    ingress_host: "portfolio-builder.com"
+
+  tasks:
+    - name: Include Common Role
+      include_role:
+        name: common
+
+    - name: Include Frontend Role
+      include_role:
+        name: frontend

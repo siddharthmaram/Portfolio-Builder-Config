@@ -1,0 +1,105 @@
+---
+- name: Create Namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ app_namespace }}"
+
+- name: Create Application Secrets
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{ app_name }}-secrets"
+        namespace: "{{ app_namespace }}"
+        labels:
+          app: "{{ app_name }}"
+      stringData: "{{ app_secrets }}"
+  when: app_secrets is defined
+
+- name: Create a Kubernetes Deployment
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: "{{ app_name }}"
+        namespace: "{{ app_namespace }}"
+        labels:
+          app: "{{ app_name }}"
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            app: "{{ app_name }}"
+        template:
+          metadata:
+            labels:
+              app: "{{ app_name }}"
+          spec:
+            containers:
+              - name: "{{ app_name }}"
+                image: "{{ image_name }}"
+                imagePullPolicy: Always
+                ports:
+                  - containerPort: "{{ container_port }}"
+                
+                envFrom:
+                  - secretRef:
+                      name: "{{ app_name }}-secrets"
+                      optional: true
+
+                resources:
+                  requests:
+                    memory: "64Mi"
+                    cpu: "250m"
+                  limits:
+                    memory: "256Mi"
+                    cpu: "500m"
+
+- name: Create a ClusterIP Service
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: "{{ app_name }}-service"
+        namespace: "{{ app_namespace }}"
+      spec:
+        type: ClusterIP
+        selector:
+          app: "{{ app_name }}"
+        ports:
+          - port: 80
+            targetPort: "{{ container_port }}"
+
+- name: Create HPA
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: autoscaling/v2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: "{{ app_name }}-hpa"
+        namespace: "{{ app_namespace }}"
+      spec:
+        scaleTargetRef:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: "{{ app_name }}"
+        minReplicas: 2
+        maxReplicas: 5
+        metrics:
+          - type: Resource
+            resource:
+              name: cpu
+              target:
+                type: Utilization
+                averageUtilization: 50

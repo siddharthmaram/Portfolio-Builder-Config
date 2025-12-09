@@ -1,0 +1,10 @@
+---
+
+- name: Setting up Minikube and Kubectl
+  include_tasks: setup.yml
+
+- name: Getting Config for ELK Stack
+  include_tasks: config.yml
+
+- name: Deploying ELK Stack
+  include_tasks: deploy.yml

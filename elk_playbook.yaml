@@ -1,0 +1,25 @@
+- name: Setting ELK Stack
+  hosts: local
+  become: no
+
+  vars:
+    es_service_name: "elasticsearch"
+    es_namespace: "elk-stack-namespace"
+    es_port_http: 9200
+    es_port_transport: 9300
+    es_statefulset_name: "elasticsearch-statefulset"
+    es_replicas: 1
+    es_image: "docker.elastic.co/elasticsearch/elasticsearch:7.10.1"
+
+    filebeat_daemonset_name: "filebeat-daemonset"
+
+    kibana_port: 5601
+    kibana_deployment_name: "kibana-deployment"
+    kibana_service_name: "kibana-service"
+    kibana_ingress_name: "kibana-ingress"
+    kibana_host: "kibana.portfolio-builder.com"
+
+  tasks:
+    - name: Include ELK Stack Role
+      include_role:
+        name: elk_stack

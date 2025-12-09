@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{kibana_deployment_name }}
+    namespace: {{ es_namespace }}
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: kibana
+    template:
+        metadata:
+            labels:
+                app: kibana
+        spec:
+            containers:
+                - name: kibana
+                  image: docker.elastic.co/kibana/kibana:7.10.1
+                  ports:
+                    - containerPort: {{ kibana_port }}
+                  env:
+                    - name: ELASTICSEARCH_HOSTS
+                      value: "http://{{ es_service_name }}:{{ es_port_http }}"
+                  resources:
+                    limits:
+                      memory: "1Gi"
+                      cpu: "500m"
+                    requests:
+                      memory: "512Mi"
+                      cpu: "250m"

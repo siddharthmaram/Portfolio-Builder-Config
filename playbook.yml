@@ -1,0 +1,20 @@
+---
+- name: Setting up ELK Stack and Frontend Application
+  hosts: local
+  become: no
+
+  vars:
+    image_repository: "{{ docker_image_repository }}"
+    image_tag: "{{ docker_image_tag }}"
+
+  tasks:
+    - name: Include ELK Stack Role
+      include_role:
+        name: elk_stack
+
+    - name: Include Frontend Role
+      include_role:
+        name: portfolio_frontend
+    
+    
+

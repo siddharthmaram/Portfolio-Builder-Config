@@ -1,0 +1,54 @@
+---
+
+- name: Ensure ELK namespace exists
+  command: kubectl apply -f /tmp/elk_namespace.yaml
+
+- name: Apply Elasticsearch Headless Service
+  command: kubectl apply -f /tmp/elasticsearch_service.yaml -n {{ es_namespace }}
+  register: kubectl_service_output
+  changed_when: "'created' in kubectl_service_output.stdout or 'configured' in kubectl_service_output.stdout"
+
+- name: Apply Elasticsearch StatefulSet Deployment
+  command: kubectl apply -f /tmp/elasticsearch_deploy.yaml -n {{ es_namespace }}
+  register: kubectl_deploy_output
+  changed_when: "'created' in kubectl_deploy_output.stdout or 'configured' in kubectl_deploy_output.stdout"
+
+- name: Wait for Elasticsearch StatefulSet Rollout to complete
+  command: |
+    kubectl rollout status statefulset/{{ es_statefulset_name }} -n {{ es_namespace }} --timeout=120s
+  when: kubectl_deploy_output.changed
+
+- name: Apply Filebeat RBAC
+  command: kubectl apply -f /tmp/filebeat_rbac.yaml -n {{ es_namespace }}
+  register: kubectl_rbac_output
+  changed_when: "'created' in kubectl_rbac_output.stdout or 'configured' in kubectl_rbac_output.stdout"
+
+- name: Apply Filebeat ConfigMap
+  command: kubectl apply -f /tmp/filebeat_configmap.yaml -n {{ es_namespace }}
+  register: kubectl_configmap_output
+  changed_when: "'created' in kubectl_configmap_output.stdout or 'configured' in kubectl_configmap_output.stdout"
+
+- name: Apply Filebeat DaemonSet
+  command: kubectl apply -f /tmp/filebeat_daemonset.yaml -n {{ es_namespace }}
+  register: kubectl_daemonset_output
+  changed_when: "'created' in kubectl_daemonset_output.stdout or 'configured' in kubectl_daemonset_output.stdout"
+
+- name: Wait for Filebeat DaemonSet Rollout to complete
+  command: |
+    kubectl rollout status daemonset/{{ filebeat_daemonset_name }} -n {{ es_namespace }} --timeout=120s
+  when: kubectl_daemonset_output.changed
+
+- name: Apply Kibana Deployment
+  command: kubectl apply -f /tmp/kibana_deployment.yaml -n {{ es_namespace }}
+  register: kubectl_kibana_deploy_output
+  changed_when: "'created' in kubectl_kibana_deploy_output.stdout or 'configured' in kubectl_kibana_deploy_output.stdout" 
+
+- name: Apply Kibana Service
+  command: kubectl apply -f /tmp/kibana_service.yaml -n {{ es_namespace }}
+  register: kubectl_kibana_service_output
+  changed_when: "'created' in kubectl_kibana_service_output.stdout or 'configured' in kubectl_kibana_service_output.stdout"
+
+- name: Apply Kibana Ingress
+  command: kubectl apply -f /tmp/kibana_ingress.yaml -n {{ es_namespace }}
+  register: kubectl_kibana_ingress_output
+  changed_when: "'created' in kubectl_kibana_ingress_output.stdout or 'configured' in kubectl_kibana_ingress_output.stdout"
