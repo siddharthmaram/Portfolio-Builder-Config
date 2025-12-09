@@ -2,7 +2,7 @@ pipeline {
     agent any
     triggers{githubPush()}
     environment {
-        KUBECONFIG = '/home/ubuntu/.kube/config'
+        KUBECONFIG = '/home/sohith/.kube/config'
     }
 
     stages {
