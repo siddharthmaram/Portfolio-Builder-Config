@@ -12,6 +12,8 @@
 
     ingress_name: "frontend-ingress"
     ingress_host: "portfolio-builder.com"
+    backend_service_name: "portfolio-backend-service"
+    backend_service_port: 8000
 
   tasks:
     - name: Include Common Role
