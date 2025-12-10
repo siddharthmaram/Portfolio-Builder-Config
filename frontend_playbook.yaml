@@ -9,6 +9,8 @@
     app_name: "portfolio-frontend"
     image_name: "sohith18/portfolio-frontend:latest"
     container_port: 80
+    memory_request: "64Mi"
+    memory_limit: "256Mi"
 
     ingress_name: "frontend-ingress"
     ingress_host: "portfolio-builder.com"

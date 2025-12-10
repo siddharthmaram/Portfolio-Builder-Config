@@ -57,10 +57,10 @@
 
                 resources:
                   requests:
-                    memory: "64Mi"
+                    memory: "{{ memory_request | default('64Mi') }}"
                     cpu: "250m"
                   limits:
-                    memory: "256Mi"
+                    memory: "{{ memory_limit | default('256Mi') }}"
                     cpu: "500m"
 
 - name: Create a ClusterIP Service
