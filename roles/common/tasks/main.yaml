@@ -103,3 +103,26 @@
               target:
                 type: Utilization
                 averageUtilization: 50
+
+- name: Create Ingress
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: "{{ ingress_name }}"
+        namespace: "{{ app_namespace }}"
+      spec:
+        ingressClassName: nginx
+        rules:
+          - host: "{{ ingress_host }}"
+            http:
+              paths:
+                - path: "{{ path }}"
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: "{{ app_name }}-service"
+                      port:
+                        number: 80

@@ -10,6 +10,10 @@
     image_name: "sohith18/portfolio-builder-model:latest"
     container_port: 8000
 
+    ingress_name: "model-ingress"
+    ingress_host: "portfolio-builder.com"
+    path: "/api"
+
   tasks:
     - name: Include Common Role
       include_role:

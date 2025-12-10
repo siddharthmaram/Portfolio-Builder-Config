@@ -18,7 +18,3 @@
     - name: Include Common Role
       include_role:
         name: common
-
-    - name: Include Ingress Role
-      include_role:
-        name: ingress
