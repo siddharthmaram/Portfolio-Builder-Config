@@ -1,5 +1,5 @@
 ---
-- name: Setting Backend Server
+- name: Setting Model Service
   hosts: local
   become: no
 
@@ -11,6 +11,10 @@
     container_port: 8000
     memory_request: "3Gi"
     memory_limit: "5Gi"
+
+    ingress_name: "model-ingress"
+    ingress_host: "portfolio-builder.com"
+    path: "/model"
 
   tasks:
     - name: Include Common Role
