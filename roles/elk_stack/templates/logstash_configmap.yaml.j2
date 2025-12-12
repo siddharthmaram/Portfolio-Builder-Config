@@ -37,6 +37,6 @@ data:
       elasticsearch {
         hosts => ["http://{{ es_service_name }}.{{ es_namespace }}.svc.cluster.local:{{ es_port_http }}"]
         # Use the filebeat index pattern as discussed
-        index => "filebeat-%{[agent.version]}-%{+YYYY.MM.dd}" 
+        index => "logstash-%{+YYYY.MM.dd}" 
       }
     }
