@@ -30,6 +30,21 @@
     src: filebeat_daemonset.yaml.j2
     dest: /tmp/filebeat_daemonset.yaml
 
+- name: Make config for Logstash ConfigMap
+  template:
+    src: logstash_configmap.yaml.j2
+    dest: /tmp/logstash_configmap.yaml
+
+- name: Make config for Logstash Deployment
+  template:
+    src: logstash_deployment.yaml.j2
+    dest: /tmp/logstash_deployment.yaml
+
+- name: Make config for Logstash Service
+  template:
+    src: logstash_service.yaml.j2
+    dest: /tmp/logstash_service.yaml
+
 - name: Make config for Kibana Deployment
   template:
     src: kibana_deployment.yaml.j2

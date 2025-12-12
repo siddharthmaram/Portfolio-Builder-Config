@@ -68,6 +68,6 @@ data:
     # ---------------------------
     # OUTPUT
     # ---------------------------
-    output.elasticsearch:
-      hosts: ["http://{{ es_service_name }}.{{ es_namespace }}.svc.cluster.local:{{ es_port_http }}"]
-      index: "filebeat-%{[agent.version]}-%{+yyyy.MM.dd}"
+    output.logstash:
+      # Point to the Service created in step 1
+      hosts: ["logstash-service.{{ es_namespace }}.svc.cluster.local:5044"]

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash-deployment
+  namespace: {{ es_namespace }}
+  labels:
+    k8s-app: logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: logstash
+  template:
+    metadata:
+      labels:
+        k8s-app: logstash
+    spec:
+      containers:
+      - name: logstash
+        # Matching your Filebeat version (7.10.1) is recommended
+        image: docker.elastic.co/logstash/logstash:7.10.1
+        ports:
+        - containerPort: 5044
+          name: filebeat
+        env:
+          - name: LS_JAVA_OPTS
+            value: "-Xmx1g -Xms1g"
+        volumeMounts:
+          - name: config-volume
+            mountPath: /usr/share/logstash/config/logstash.yml
+            subPath: logstash.yml
+          - name: pipeline-volume
+            mountPath: /usr/share/logstash/pipeline/logstash.conf
+            subPath: logstash.conf
+      volumes:
+        - name: config-volume
+          configMap:
+            name: logstash-config
+            items:
+              - key: logstash.yml
+                path: logstash.yml
+        - name: pipeline-volume
+          configMap:
+            name: logstash-config
+            items:
+              - key: logstash.conf
+                path: logstash.conf

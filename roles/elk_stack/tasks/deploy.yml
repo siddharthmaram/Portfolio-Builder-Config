@@ -38,6 +38,26 @@
     kubectl rollout status daemonset/{{ filebeat_daemonset_name }} -n {{ es_namespace }} --timeout=120s
   when: kubectl_daemonset_output.changed
 
+- name: Apply Logstash ConfigMap
+  command: kubectl apply -f /tmp/logstash_configmap.yaml -n {{ es_namespace }}
+  register: kubectl_logstash_config_output
+  changed_when: "'created' in kubectl_logstash_config_output.stdout or 'configured' in kubectl_logstash_config_output.stdout"
+
+- name: Apply Logstash Deployment
+  command: kubectl apply -f /tmp/logstash_deployment.yaml -n {{ es_namespace }}
+  register: kubectl_logstash_deploy_output
+  changed_when: "'created' in kubectl_logstash_deploy_output.stdout or 'configured' in kubectl_logstash_deploy_output.stdout"
+
+- name: Apply Logstash Service
+  command: kubectl apply -f /tmp/logstash_service.yaml -n {{ es_namespace }}
+  register: kubectl_logstash_service_output
+  changed_when: "'created' in kubectl_logstash_service_output.stdout or 'configured' in kubectl_logstash_service_output.stdout"
+
+- name: Wait for Logstash Deployment Rollout to complete
+  command: |
+    kubectl rollout status deployment/logstash-deployment -n {{ es_namespace }} --timeout=120s
+  when: kubectl_logstash_service_output.changed
+
 - name: Apply Kibana Deployment
   command: kubectl apply -f /tmp/kibana_deployment.yaml -n {{ es_namespace }}
   register: kubectl_kibana_deploy_output

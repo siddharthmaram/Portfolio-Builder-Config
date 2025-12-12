@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: {{ es_namespace }}
+  labels:
+    k8s-app: logstash
+data:
+  logstash.yml: |-
+    http.host: "0.0.0.0"
+    path.config: /usr/share/logstash/pipeline
+  
+  logstash.conf: |-
+    # 1. Receive data from Filebeat on port 5044
+    input {
+      beats {
+        port => 5044
+      }
+    }
+
+    # 2. Filter/Process logs (Optional)
+    filter {
+      # Since Filebeat is already decoding JSON, we mostly just pass through here.
+      # You can add grok patterns or mutate filters here later.
+    }
+
+    # 3. Output to Elasticsearch
+    output {
+      elasticsearch {
+        hosts => ["http://{{ es_service_name }}.{{ es_namespace }}.svc.cluster.local:{{ es_port_http }}"]
+        # Creating daily indices similar to your Filebeat config
+        index => "logstash-%{+YYYY.MM.dd}" 
+        # If using X-Pack security, add user/password here
+      }
+      # Debug output (comment out in production)
+      # stdout { codec => rubydebug }
+    }
