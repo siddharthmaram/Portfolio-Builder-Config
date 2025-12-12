@@ -57,7 +57,7 @@
   command: |
     kubectl rollout status deployment/logstash-deployment -n {{ es_namespace }} --timeout=120s
   when: kubectl_logstash_service_output.changed
-
+ 
 - name: Apply Kibana Deployment
   command: kubectl apply -f /tmp/kibana_deployment.yaml -n {{ es_namespace }}
   register: kubectl_kibana_deploy_output
