@@ -11,27 +11,32 @@ data:
     path.config: /usr/share/logstash/pipeline
   
   logstash.conf: |-
-    # 1. Receive data from Filebeat on port 5044
+    # 1. Receive data
     input {
       beats {
         port => 5044
       }
     }
 
-    # 2. Filter/Process logs (Optional)
+    # 2. Filter/Process logs
     filter {
-      # Since Filebeat is already decoding JSON, we mostly just pass through here.
-      # You can add grok patterns or mutate filters here later.
+      # It replaces the 'decode_json_fields' from Filebeat
+      # Check if the message field looks like JSON (starts with {)
+      if [message] =~ /^\s*\{/ {
+        json {
+          source => "message"
+          # This tells Logstash to continue processing even if JSON is bad
+          skip_on_invalid_json => true
+          # Note: Logstash automatically merges keys to root (overwrite_keys behavior)
+        }
+      }
     }
 
     # 3. Output to Elasticsearch
     output {
       elasticsearch {
         hosts => ["http://{{ es_service_name }}.{{ es_namespace }}.svc.cluster.local:{{ es_port_http }}"]
-        # Creating daily indices similar to your Filebeat config
-        index => "logstash-%{+YYYY.MM.dd}" 
-        # If using X-Pack security, add user/password here
+        # Use the filebeat index pattern as discussed
+        index => "filebeat-%{[agent.version]}-%{+YYYY.MM.dd}" 
       }
-      # Debug output (comment out in production)
-      # stdout { codec => rubydebug }
     }

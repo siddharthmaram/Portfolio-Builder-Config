@@ -20,10 +20,9 @@ data:
         paths:
           - /var/log/containers/*.log
 
-        # Let Filebeat unwrap the Docker/CRI JSON wrapper
-        # and DO NOT attach json errors into the event
+        # Keep these! They unwrap the Docker/CRI wrapper
         json.keys_under_root: true
-        json.add_error_key: false       # <- changed from true
+        json.add_error_key: false 
         json.message_key: log
         json.ignore_decoding_error: true
 
@@ -31,7 +30,7 @@ data:
     # PROCESSORS
     # ---------------------------
     processors:
-      # Add Kubernetes metadata
+      # KEEP THIS: Filebeat is best at tagging K8s metadata
       - add_kubernetes_metadata:
           host: ${NODE_NAME}
           in_cluster: true
@@ -39,18 +38,7 @@ data:
             - logs_path:
                 logs_path: "/var/log/containers/"
 
-      # Optionally decode JSON from app logs
-      # Only if your app *actually* writes JSON to stdout.
-      # If it does NOT, comment this whole processor out.
-      - decode_json_fields:
-          fields: ["message"]
-          target: ""
-          overwrite_keys: true
-          add_error_key: true
-          max_depth: 2
-          when:
-            regexp:
-              message: '^\s*\{'
+      # REMOVED: decode_json_fields (Moved to Logstash)
 
     # ---------------------------
     # SETUP
@@ -69,5 +57,4 @@ data:
     # OUTPUT
     # ---------------------------
     output.logstash:
-      # Point to the Service created in step 1
       hosts: ["logstash-service.{{ es_namespace }}.svc.cluster.local:5044"]
